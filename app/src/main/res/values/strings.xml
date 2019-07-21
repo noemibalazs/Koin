@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Koin</string>
+    <string name="fragment_top_rated">Top Rated</string>
+    <string name="fragment_popular">Popular</string>
+    <string name="fragment_favorite">Favorite</string>
+    <string name="movie_summary">Summary</string>
+    <string name="movie_trailers">Trailers</string>
+    <string name="movie_reviews">Reviews</string>
+    <string name="movie_details_title">Movie Details</string>
+</resources>
