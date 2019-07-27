@@ -1,42 +1,25 @@
 package com.example.koin.network_data
 
-import android.os.Parcel
-import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import com.example.koin.room.ReviewConverter
+import com.example.koin.room.TrailerConverter
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = "movie_table")
 data class Movie(
+    @PrimaryKey
     @field:SerializedName("id") val id: Int,
     @field:SerializedName("title") val title: String,
     @field: SerializedName("overview") val description: String,
     @field:SerializedName("release_date") val releaseDate: String,
     @field:SerializedName("vote_average") val rating: String,
-    @field:SerializedName("poster_path") val posterPath: String
-) : Parcelable {
-    constructor(source: Parcel) : this(
-        source.readInt(),
-        source.readString(),
-        source.readString(),
-        source.readString(),
-        source.readString(),
-        source.readString()
-    )
+    @field:SerializedName("poster_path") val posterPath: String?=null,
 
-    override fun describeContents() = 0
+    @TypeConverters(TrailerConverter::class)
+    var reviewList: ReviewList?=null,
 
-    override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
-        writeInt(id)
-        writeString(title)
-        writeString(description)
-        writeString(releaseDate)
-        writeString(rating)
-        writeString(posterPath)
-    }
-
-    companion object {
-        @JvmField
-        val CREATOR: Parcelable.Creator<Movie> = object : Parcelable.Creator<Movie> {
-            override fun createFromParcel(source: Parcel): Movie = Movie(source)
-            override fun newArray(size: Int): Array<Movie?> = arrayOfNulls(size)
-        }
-    }
-}
+    @TypeConverters(ReviewConverter::class)
+    var trailerList: TrailerList?=null
+)

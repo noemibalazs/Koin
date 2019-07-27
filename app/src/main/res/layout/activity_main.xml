@@ -18,7 +18,7 @@
         <com.google.android.material.tabs.TabLayout
                 android:id="@+id/main_tab_layout"
                 style="@style/Tab_style"
-                app:tabMode="fixed"
+                app:tabMode="scrollable"
                 app:tabGravity="fill"
                 app:tabMaxWidth="0dp"
                 app:tabBackground="@android:color/black"

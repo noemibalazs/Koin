@@ -17,17 +17,23 @@ import retrofit2.http.Query
 
 interface MovieService {
 
-    @GET("top_rated")
+    @GET("movie/top_rated")
     fun getTopRatedMovies(@Query("api_key") key: String): Call<MovieList>
 
-    @GET("popular")
+    @GET("movie/popular")
     fun getPopularMovies(@Query("api_key") key: String): Call<MovieList>
 
-    @GET("{id}/videos")
+    @GET("movie/{id}/videos")
     fun getTrailerList(@Path("id") id: Int, @Query("api_key") key: String): Call<TrailerList>
 
-    @GET("{id}/reviews")
+    @GET("movie/{id}/reviews")
     fun getReviewList(@Path("id") id: Int, @Query("api_key") key: String): Call<ReviewList>
+
+    @GET("search/movie")
+    fun getSearchedMovies(@Query("api_key") key: String, @Query("query") query: String):Call<MovieList>
+
+    @GET("discover/movie")
+    fun getVotedMovies(@Query("api_key") key: String, @Query("sort_by") voted:String):Call<MovieList>
 
     companion object {
 

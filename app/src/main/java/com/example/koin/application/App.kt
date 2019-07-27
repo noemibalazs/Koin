@@ -14,7 +14,7 @@ class App: Application() {
         startKoin {
             androidLogger()
             androidContext(this@App)
-            modules(listOf(networkModule, sharedPrefModule, dataBaseModule, repoModule, viewModule))
+            modules(listOf(networkModule, sharedPrefModule, dataBaseModule, repoModule, viewModule, favorite))
 
         }
     }
