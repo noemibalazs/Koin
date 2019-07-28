@@ -25,7 +25,7 @@ import org.koin.core.KoinComponent
 import org.koin.core.inject
 import org.koin.core.logger.KOIN_TAG
 
-class CoverAdapter(context: Context, val myList: List<Movie>) : ArrayAdapter<Movie>(context, 0, myList), KoinComponent {
+class CoverAdapter(context: Context, val myList: MutableList<Movie>) : ArrayAdapter<Movie>(context, 0, myList), KoinComponent {
 
     private val sharedPrefHelper: SharedPrefHelper by inject()
     private val movieDao: MovieDao by inject()
@@ -43,29 +43,30 @@ class CoverAdapter(context: Context, val myList: List<Movie>) : ArrayAdapter<Mov
         val image = view?.findViewById<ImageView>(R.id.favorite_image)
         val movie = myList[position]
 
-        if (movie.posterPath == null){
+        if (movie.posterPath == null) {
             context.loadPicture(context.getDrawableUri(), image!!)
-        }else{
+        } else {
             context.loadPicture(getMoviePoster(movie.posterPath), image!!)
         }
 
         movieEntity = context.movie2Entity(movie)
 
-        image.let {
-            it.setOnClickListener {
+        image.setOnClickListener {
 
-                sharedPrefHelper.saveMovieId(movieEntity.id)
-                saveMovie(movieEntity)
+            Log.d(KOIN_TAG, "My movie entity is: $movieEntity")
+            sharedPrefHelper.saveMovieId(movie.id)
 
-                context.openActivity(MovieDetailsActivity::class.java)
-            }
+            checkTrailers()
+            checkReviews()
+
+            saveMovie(movieEntity)
+
+            context.openActivity(MovieDetailsActivity::class.java)
         }
         return view!!
     }
 
     private fun saveMovie(movie: MovieEntity) {
-        checkReviews()
-        checkTrailers()
         doAsync {
             movieDao.addMovie2DB(movie)
         }
@@ -77,22 +78,24 @@ class CoverAdapter(context: Context, val myList: List<Movie>) : ArrayAdapter<Mov
                 trailers?.let {
                     movieEntity.trailerList = it
                     saveMovie(movieEntity)
+                    Log.d(KOIN_TAG, "Trailer list size: ${it.trailerList.size}")
                 }
             }
         }
         trailerViewModel.loadingMovies().observe(context as LifecycleOwner, trailerObserver)
     }
 
-    private fun checkReviews(){
-        val reviewObserver = object : Observer<ReviewList>{
+    private fun checkReviews() {
+        val reviewObserver = object : Observer<ReviewList> {
             override fun onChanged(reviews: ReviewList?) {
                 reviews?.let {
-                   movieEntity.reviewList = it
+                    movieEntity.reviewList = it
                     saveMovie(movieEntity)
+                    Log.d(KOIN_TAG, "Review list size: ${it.reviewList.size}")
                 }
             }
         }
-        reviewViewModel.loadingMovies().observe(context as LifecycleOwner,reviewObserver)
+        reviewViewModel.loadingMovies().observe(context as LifecycleOwner, reviewObserver)
     }
 
 }

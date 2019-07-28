@@ -10,10 +10,10 @@ import com.example.koin.util.MOVIE_DB
 interface MovieDao {
 
     @Query("SELECT * FROM movie_table")
-    fun getMovieList(): LiveData<List<MovieEntity>>
+    fun getMovieList(): LiveData<MutableList<MovieEntity>>
 
     @Query("SELECT * FROM movie_table WHERE id = :id")
-    fun getMovie(id: Int): LiveData<MovieEntity>
+    fun getMovieByID(id: Int): LiveData<MovieEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addMovie2DB(entity: MovieEntity)

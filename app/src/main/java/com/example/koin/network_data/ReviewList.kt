@@ -5,7 +5,7 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 class ReviewList(
-    @field:SerializedName("results") val reviewList: List<Review>
+    @field:SerializedName("results") val reviewList: MutableList<Review>
 ) : Parcelable {
     constructor(source: Parcel) : this(
         source.createTypedArrayList(Review.CREATOR)

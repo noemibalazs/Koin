@@ -2,20 +2,24 @@ package com.example.koin.adapter
 
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.koin.R
 import com.example.koin.network_data.Trailer
+import com.example.koin.util.getMoviePoster
 import com.example.koin.util.getMovieYoutubePath
 import com.example.koin.util.getYoutubeScreenShot
 import com.example.koin.util.loadPicture
 
-class TrailerAdapter(val context: Context, val trailers: List<Trailer>) :
+class TrailerAdapter(val context: Context, val trailers: MutableList<Trailer>) :
     RecyclerView.Adapter<TrailerAdapter.TrailerViewHolder>() {
 
 
@@ -24,18 +28,20 @@ class TrailerAdapter(val context: Context, val trailers: List<Trailer>) :
         return TrailerViewHolder(view)
     }
 
-
     override fun getItemCount(): Int {
         return trailers.size
     }
 
     override fun onBindViewHolder(holder: TrailerViewHolder, position: Int) {
+
         val trailer = trailers[position]
         holder.name.text = trailer.name
-        context.loadPicture(getYoutubeScreenShot(trailer.key), holder.picture)
+
+        val link = getYoutubeScreenShot(trailer.key)
+        context.loadPicture(link, holder.picture)
 
         holder.picture.setOnClickListener {
-            viewTrailer(getMovieYoutubePath(trailer.key))
+            checkConnectionAndPlay(getMovieYoutubePath(trailer.key))
         }
     }
 
@@ -45,11 +51,18 @@ class TrailerAdapter(val context: Context, val trailers: List<Trailer>) :
 
     }
 
-    private fun viewTrailer(link:String){
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.apply {
-            data = Uri.parse(link)
+    private fun checkConnectionAndPlay(link: String){
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val info = connectivityManager.activeNetworkInfo
+        if (info !=null && info.isConnected){
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.apply {
+                data = Uri.parse(link)
+            }
+            context.startActivity(intent)
+        }else{
+            Toast.makeText(context, context.getString(R.string.toast_message), Toast.LENGTH_LONG).show()
         }
-        context.startActivity(intent)
+
     }
 }

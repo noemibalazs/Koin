@@ -16,7 +16,7 @@ import com.example.koin.util.openActivity
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
-class FavoriteAdapter(context: Context, val myList: List<MovieEntity>) : ArrayAdapter<MovieEntity>(context, 0, myList), KoinComponent{
+class FavoriteAdapter(context: Context, val myList: MutableList<MovieEntity>) : ArrayAdapter<MovieEntity>(context, 0, myList), KoinComponent{
 
     private val sharedPrefHelper: SharedPrefHelper by inject()
 

@@ -5,7 +5,7 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 data class MovieList(
-    @field:SerializedName("results") val movieList: List<Movie>
+    @field:SerializedName("results") val movieList: MutableList<Movie>
 ) : Parcelable {
     constructor(source: Parcel) : this(
         ArrayList<Movie>().apply { source.readList(this, Movie::class.java.classLoader) }

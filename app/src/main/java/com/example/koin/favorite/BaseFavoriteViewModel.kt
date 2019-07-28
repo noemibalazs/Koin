@@ -8,9 +8,9 @@ import com.example.koin.room.MovieDao
 import com.example.koin.room.MovieEntity
 
 abstract class BaseFavoriteViewModel(application: Application, internal val movieDao: MovieDao) : AndroidViewModel(application) {
-    abstract fun favoriteMovies(): LiveData<List<MovieEntity>>
+    abstract fun favoriteMovies(): LiveData<MutableList<MovieEntity>>
 
-    fun getMovies(): LiveData<List<MovieEntity>>{
+    fun getMovies(): LiveData<MutableList<MovieEntity>>{
         return movieDao.getMovieList()
     }
 }

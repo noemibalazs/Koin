@@ -7,7 +7,7 @@ import com.example.koin.room.MovieDao
 import com.example.koin.room.MovieEntity
 
 class FavoriteViewModel(application: Application, movieDao: MovieDao) : BaseFavoriteViewModel(application, movieDao) {
-    override fun favoriteMovies(): LiveData<List<MovieEntity>> {
+    override fun favoriteMovies(): LiveData<MutableList<MovieEntity>> {
         return getMovies()
     }
 

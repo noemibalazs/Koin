@@ -5,7 +5,7 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 class TrailerList(
-    @field:SerializedName("results") val trailerList: List<Trailer>
+    @field:SerializedName("results") val trailerList: MutableList<Trailer>
 ) : Parcelable {
     constructor(source: Parcel) : this(
         source.createTypedArrayList(Trailer.CREATOR)

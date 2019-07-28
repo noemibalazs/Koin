@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.koin.R
 import com.example.koin.network_data.Review
 
-class ReviewAdapter(val context: Context, val reviews:List<Review>): RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>() {
+class ReviewAdapter(val context: Context, val reviews:MutableList<Review>): RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.movie_review, parent, false)

@@ -8,7 +8,7 @@ import com.example.koin.network_data.TrailerList
 import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "movie_table")
-class MovieEntity (
+data class MovieEntity (
 
     @PrimaryKey
     @field:SerializedName("id") val id: Int,
