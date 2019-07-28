@@ -8,6 +8,7 @@
     <string name="movie_summary">Summary</string>
     <string name="movie_trailers">Trailers</string>
     <string name="movie_reviews">Reviews</string>
-    <string name="movie_details_title">Movie Details</string>
+    <string name="movie_detail_title">Movie Details</string>
     <string name="search_movie_hint">Search ....</string>
+    <string name="movie_favorite_title">Favorite Details</string>
 </resources>

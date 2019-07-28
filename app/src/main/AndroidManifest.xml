@@ -12,9 +12,16 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".ui.MovieDetailsActivity"
-                  android:label="@string/movie_details_title"
-                  android:parentActivityName=".ui.MainActivity">
+        <activity android:name=".ui.FavoriteDetailsActivity"
+                  android:label="@string/movie_favorite_title">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value=".ui.MainActivity"/>
+        </activity>
+        <activity
+                android:name=".ui.MovieDetailsActivity"
+                android:label="@string/movie_detail_title"
+                android:parentActivityName=".ui.MainActivity">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value=".ui.MainActivity"/>

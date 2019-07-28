@@ -7,6 +7,7 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.example.koin.R
 import com.example.koin.network_data.Movie
+import com.example.koin.room.MovieEntity
 
 fun getMoviePoster(posterPath: String): String{
     return POSTER_URL + posterPath
@@ -36,4 +37,12 @@ fun Context.getDrawableUri(): String{
 fun <T> Context.openActivity(dest: Class<T>){
     val  intent = Intent(this, dest)
     this.startActivity(intent)
+}
+
+fun Context.movie2Entity(movie: Movie): MovieEntity{
+    if (movie.posterPath == null){
+        return MovieEntity(movie.id, movie.title, movie.description, movie.releaseDate, movie.rating, this.getDrawableUri())
+    }else{
+        return MovieEntity(movie.id, movie.title, movie.description, movie.releaseDate, movie.rating, getMoviePoster(movie.posterPath))
+    }
 }

@@ -15,6 +15,7 @@ import com.example.koin.network_data.Movie
 import com.example.koin.network_data.ReviewList
 import com.example.koin.network_data.TrailerList
 import com.example.koin.room.MovieDao
+import com.example.koin.room.MovieEntity
 import com.example.koin.ui.MovieDetailsActivity
 import com.example.koin.util.*
 import com.example.koin.viewmodel.ReviewViewModel
@@ -31,43 +32,40 @@ class CoverAdapter(context: Context, val myList: List<Movie>) : ArrayAdapter<Mov
     private val trailerViewModel: TrailerViewModel by inject()
     private val reviewViewModel: ReviewViewModel by inject()
 
-    private lateinit var movie: Movie
+    private lateinit var movieEntity: MovieEntity
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+
         var view = convertView
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.movie_cover, parent, false)
         }
         val image = view?.findViewById<ImageView>(R.id.favorite_image)
-        movie = myList[position]
+        val movie = myList[position]
 
         if (movie.posterPath == null){
             context.loadPicture(context.getDrawableUri(), image!!)
         }else{
-            context.loadPicture(getMoviePoster(movie.posterPath!!), image!!)
+            context.loadPicture(getMoviePoster(movie.posterPath), image!!)
         }
 
+        movieEntity = context.movie2Entity(movie)
 
         image.let {
-
             it.setOnClickListener {
 
-                sharedPrefHelper.saveMovieId(movie.id)
-
-                checkReviews()
-                checkTrailers()
-                saveMovie(movie)
-
-                Log.d(KOIN_TAG, "The movie id is: ${movie.id}")
+                sharedPrefHelper.saveMovieId(movieEntity.id)
+                saveMovie(movieEntity)
 
                 context.openActivity(MovieDetailsActivity::class.java)
             }
         }
-
         return view!!
     }
 
-    private fun saveMovie(movie: Movie) {
+    private fun saveMovie(movie: MovieEntity) {
+        checkReviews()
+        checkTrailers()
         doAsync {
             movieDao.addMovie2DB(movie)
         }
@@ -77,8 +75,8 @@ class CoverAdapter(context: Context, val myList: List<Movie>) : ArrayAdapter<Mov
         val trailerObserver = object : Observer<TrailerList> {
             override fun onChanged(trailers: TrailerList?) {
                 trailers?.let {
-                    movie.trailerList = it
-                    saveMovie(movie)
+                    movieEntity.trailerList = it
+                    saveMovie(movieEntity)
                 }
             }
         }
@@ -89,12 +87,11 @@ class CoverAdapter(context: Context, val myList: List<Movie>) : ArrayAdapter<Mov
         val reviewObserver = object : Observer<ReviewList>{
             override fun onChanged(reviews: ReviewList?) {
                 reviews?.let {
-                    movie.reviewList = it
-                    saveMovie(movie)
+                   movieEntity.reviewList = it
+                    saveMovie(movieEntity)
                 }
             }
         }
-
         reviewViewModel.loadingMovies().observe(context as LifecycleOwner,reviewObserver)
     }
 

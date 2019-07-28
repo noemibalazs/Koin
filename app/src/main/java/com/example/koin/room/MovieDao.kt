@@ -10,16 +10,16 @@ import com.example.koin.util.MOVIE_DB
 interface MovieDao {
 
     @Query("SELECT * FROM movie_table")
-    fun getMovieList(): LiveData<List<Movie>>
+    fun getMovieList(): LiveData<List<MovieEntity>>
 
     @Query("SELECT * FROM movie_table WHERE id = :id")
-    fun getMovie(id: Int): LiveData<Movie>
+    fun getMovie(id: Int): LiveData<MovieEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addMovie2DB(entity: Movie)
+    fun addMovie2DB(entity: MovieEntity)
 
     @Delete
-    fun deleteMovieFromDB(entity: Movie)
+    fun deleteMovieFromDB(entity: MovieEntity)
 
     companion object{
         fun getDataBaseInstance(context:Context): MovieDao{

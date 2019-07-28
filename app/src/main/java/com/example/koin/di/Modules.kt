@@ -42,5 +42,5 @@ val viewModule = module {
 }
 
 val favorite = module { 
-    viewModel { FavoriteViewModel(androidApplication(), get()) }
+    single { FavoriteViewModel(androidApplication(), get()) }
 }
