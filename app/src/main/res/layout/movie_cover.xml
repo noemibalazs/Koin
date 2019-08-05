@@ -3,10 +3,11 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="250dp">
 
     <ImageView
             android:id="@+id/favorite_image"
+            android:layout_margin="@dimen/grid_spacing"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/miss_sloane"

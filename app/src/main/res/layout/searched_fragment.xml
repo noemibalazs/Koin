@@ -17,7 +17,7 @@
             android:layout_height="wrap_content">
 
         <EditText
-                android:id="@+id/edit_movie_name"
+                android:id="@+id/editMovieName"
                 android:layout_marginStart="8dp"
                 android:inputType="text"
                 android:hint="@string/search_movie_hint"
@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"/>
 
         <ImageView
-                android:id="@+id/search_done"
+                android:id="@+id/searchDone"
                 android:src="@drawable/done"
                 android:contentDescription="@null"
                 android:tint="@color/colorAccent"
@@ -39,19 +39,18 @@
 
     </RelativeLayout>
 
-    <GridView
-            android:id="@+id/list_grid_view"
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/search_recycle_view"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintTop_toBottomOf="@id/layout_search"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:columnWidth="150dp"
-            android:numColumns="auto_fit"
-            android:stretchMode="columnWidth"
-            android:gravity="center"
+            android:clipToPadding="false"
+            app:spanCount="2"
+            android:padding="@dimen/grid_spacing"
             tools:listitem="@layout/movie_cover"
-            android:horizontalSpacing="@dimen/grid_spacing"
-            android:verticalSpacing="@dimen/grid_spacing"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

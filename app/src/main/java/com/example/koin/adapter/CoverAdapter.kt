@@ -5,10 +5,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.ImageView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
 import com.example.koin.R
 import com.example.koin.helper.SharedPrefHelper
 import com.example.koin.network_data.Movie
@@ -25,7 +25,7 @@ import org.koin.core.KoinComponent
 import org.koin.core.inject
 import org.koin.core.logger.KOIN_TAG
 
-class CoverAdapter(context: Context, val myList: MutableList<Movie>) : ArrayAdapter<Movie>(context, 0, myList), KoinComponent {
+class CoverAdapter(val context: Context, val myList: MutableList<Movie>): RecyclerView.Adapter<CoverAdapter.CustomViewHolder>(), KoinComponent {
 
     private val sharedPrefHelper: SharedPrefHelper by inject()
     private val movieDao: MovieDao by inject()
@@ -34,36 +34,42 @@ class CoverAdapter(context: Context, val myList: MutableList<Movie>) : ArrayAdap
 
     private lateinit var movieEntity: MovieEntity
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
+        val view = LayoutInflater.from(context).inflate(R.layout.movie_cover, parent, false)
+        return CustomViewHolder(view)
+    }
 
-        var view = convertView
-        if (view == null) {
-            view = LayoutInflater.from(context).inflate(R.layout.movie_cover, parent, false)
-        }
-        val image = view?.findViewById<ImageView>(R.id.favorite_image)
+    override fun getItemCount(): Int {
+        return myList.size
+    }
+
+    override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         val movie = myList[position]
 
         if (movie.posterPath == null) {
-            context.loadPicture(context.getDrawableUri(), image!!)
+            context.loadPicture(context.getDrawableUri(), holder.imageHolder)
         } else {
-            context.loadPicture(getMoviePoster(movie.posterPath), image!!)
+            context.loadPicture(getMoviePoster(movie.posterPath), holder.imageHolder)
         }
 
-        movieEntity = context.movie2Entity(movie)
+        holder.imageHolder.setOnClickListener {
 
-        image.setOnClickListener {
+            movieEntity = context.movie2Entity(movie)
 
-            Log.d(KOIN_TAG, "My movie entity is: $movieEntity")
-            sharedPrefHelper.saveMovieId(movie.id)
+            sharedPrefHelper.saveMovieId(movieEntity.id)
 
             checkTrailers()
             checkReviews()
 
-            saveMovie(movieEntity)
-
             context.openActivity(MovieDetailsActivity::class.java)
+            Log.d(KOIN_TAG, "My movie entity is: ${movieEntity.title}")
+
         }
-        return view!!
+    }
+
+
+    inner class CustomViewHolder(view: View): RecyclerView.ViewHolder(view){
+        val imageHolder = view.findViewById<ImageView>(R.id.favorite_image)
     }
 
     private fun saveMovie(movie: MovieEntity) {
@@ -97,5 +103,4 @@ class CoverAdapter(context: Context, val myList: MutableList<Movie>) : ArrayAdap
         }
         reviewViewModel.loadingMovies().observe(context as LifecycleOwner, reviewObserver)
     }
-
 }

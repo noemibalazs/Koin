@@ -51,17 +51,17 @@ class MovieDetailsActivity : AppCompatActivity() {
     }
 
     private fun populateReviews(entity: MovieEntity){
+        recycle_review.setHasFixedSize(true)
+        recycle_review.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         entity.reviewList?.let {
-            recycle_review.setHasFixedSize(true)
-            recycle_review.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
             recycle_review.adapter = ReviewAdapter(this, it.reviewList)
         }
     }
 
     private fun populateTrailers(entity: MovieEntity){
+        recycle_trailer.setHasFixedSize(true)
+        recycle_trailer.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         entity.trailerList?.let {
-            recycle_trailer.setHasFixedSize(true)
-            recycle_trailer.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
             recycle_trailer.adapter = TrailerAdapter(this, it.trailerList)
         }
     }

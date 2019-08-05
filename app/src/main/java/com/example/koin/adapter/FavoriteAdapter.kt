@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.koin.R
@@ -16,25 +15,30 @@ import com.example.koin.util.openActivity
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
-class FavoriteAdapter(context: Context, val myList: MutableList<MovieEntity>) : ArrayAdapter<MovieEntity>(context, 0, myList), KoinComponent{
+class FavoriteAdapter(val context: Context, val myList: MutableList<MovieEntity>): RecyclerView.Adapter<FavoriteAdapter.FavViewHolder>(), KoinComponent {
 
     private val sharedPrefHelper: SharedPrefHelper by inject()
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var view = convertView
-        if (view == null) {
-            view = LayoutInflater.from(context).inflate(R.layout.movie_cover, parent, false)
-        }
-        val image = view?.findViewById<ImageView>(R.id.favorite_image)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavViewHolder {
+        val view = LayoutInflater.from(context).inflate(R.layout.movie_cover, parent, false)
+        return FavViewHolder(view)
+    }
+
+    override fun getItemCount(): Int {
+        return myList.size
+    }
+
+    override fun onBindViewHolder(holder: FavViewHolder, position: Int) {
         val entity = myList[position]
 
-        context.loadPicture(entity.posterPath, image!!)
-
-        image.setOnClickListener {
+        context.loadPicture(entity.posterPath, holder.imageHolder)
+        holder.imageHolder.setOnClickListener {
             sharedPrefHelper.saveMovieId(entity.id)
             context.openActivity(FavoriteDetailsActivity::class.java)
         }
+    }
 
-        return view!!
+    inner class FavViewHolder(view:View): RecyclerView.ViewHolder(view){
+        val imageHolder = view.findViewById<ImageView>(R.id.favorite_image)
     }
 }
