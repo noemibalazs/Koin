@@ -1,6 +1,6 @@
 package com.example.koin.util
 
-const val KEY = "e4ec57629fb398e143f46a5eddae08f8"
+const val KEY = "YOUR_KEY"
 const val BASE_URL = "https://api.themoviedb.org/3/"
 
 const val POSTER_URL = "https://image.tmdb.org/t/p/w185";
